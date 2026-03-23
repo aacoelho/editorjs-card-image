@@ -6,7 +6,7 @@ import './index.scss';
 /**
  * Import types
  */
-import { cardImageData, cardImageConfig } from './types';
+import { cardImageData, cardImageConfig, cardImageFile } from './types';
 import { API, BlockAPI, BlockTool } from '@editorjs/editorjs';
 
 /**
@@ -175,16 +175,8 @@ export default class cardImage implements BlockTool {
    * @param {cardImageData} data - Raw data to store (Editor.js handles sanitization automatically)
    */
   set data(data: cardImageData) {
-    const legacyValue = data.value;
-    const looksLikeUrl =
-      typeof legacyValue === 'string' &&
-      (legacyValue.startsWith('data:') ||
-        legacyValue.startsWith('http://') ||
-        legacyValue.startsWith('https://') ||
-        legacyValue.startsWith('/'));
-
     this._data = Object.assign({}, {
-      imageUrl: data.imageUrl || (looksLikeUrl ? legacyValue : ''),
+      file: data.file,
       title: data.title || "",
       description: data.description || "",
       align: data.align || cardImage.DEFAULT_ALIGN_TYPE,
@@ -221,9 +213,10 @@ export default class cardImage implements BlockTool {
     this.nodes.imageContainer = this.make('div', this.classes.imageContainer);
 
     // If image exists (saved state / read-only), render it immediately
-    if (this._data.imageUrl) {
+    const currentUrl = this._data.file?.sizes?.large?.url || this._data.file?.url;
+    if (currentUrl) {
       this.nodes.image = this.make('img', this.classes.image, {
-        src: this._data.imageUrl,
+        src: currentUrl,
         alt: 'Card image',
       });
       this.nodes.imageContainer.appendChild(this.nodes.image);
@@ -247,26 +240,28 @@ export default class cardImage implements BlockTool {
         innerHTML: `${this.replaceIconSvg}<span class="cdx-card-image__replace-button-text">${this.replaceImageButtonPlaceholder}</span>`,
       });
 
-      // Delete button (clears `imageUrl`)
+      // Delete button (clears `file`)
       this.nodes.deleteButton = this.make('div', this.classes.deleteButton, {
         innerHTML: `${this.deleteIconSvg}<span class="cdx-card-image__delete-button-text">${this.deleteImageButtonPlaceholder}</span>`,
       });
 
-      const showImage = (url: string) => {
-        this._data.imageUrl = url;
+      const setFile = (file: cardImageFile) => {
+        this._data.file = file;
         this.updateImageState();
 
         if (this.nodes.image) {
+          const url = file?.sizes?.large?.url || file?.url || '';
           (this.nodes.image as HTMLImageElement).src = url;
           return;
         }
 
+        const url = file?.sizes?.large?.url || file?.url || '';
         this.nodes.image = this.make('img', this.classes.image, {
           src: url,
           alt: 'Card image',
         });
 
-        // Insert image above the button (if button exists)
+        // Insert image above the buttons (if they exist)
         const firstChild = this.nodes.imageContainer?.firstChild || null;
         this.nodes.imageContainer?.insertBefore(this.nodes.image, firstChild);
       };
@@ -276,16 +271,15 @@ export default class cardImage implements BlockTool {
           if (typeof this.config.selectFiles === 'function') {
             const result = await this.config.selectFiles();
 
-            const extractedUrl =
+            const extractedFile: cardImageFile | undefined =
               typeof result === 'string'
-                ? result
-                : (result?.url as string) ||
-                  (result?.success === 1 ? result?.file?.url : '') ||
-                  result?.file?.url ||
-                  '';
+                ? { url: result }
+                : (result?.success === 1 && result?.file?.url ? result.file : undefined) ||
+                  (result?.file?.url ? result.file : undefined) ||
+                  (result?.url ? { url: result.url } : undefined);
 
-            if (extractedUrl) {
-              showImage(extractedUrl);
+            if (extractedFile?.url) {
+              setFile(extractedFile);
               return;
             }
           }
@@ -301,7 +295,7 @@ export default class cardImage implements BlockTool {
       this.nodes.replaceButton?.addEventListener('click', pickImage);
 
       this.nodes.deleteButton.addEventListener('click', () => {
-        this._data.imageUrl = '';
+        this._data.file = undefined;
         this.updateImageState();
 
         if (this.nodes.image) {
@@ -317,7 +311,12 @@ export default class cardImage implements BlockTool {
         reader.onload = () => {
           const result = reader.result;
           if (typeof result === 'string') {
-            showImage(result);
+            setFile({
+              url: result,
+              name: file.name,
+              type: file.type,
+              size: file.size,
+            });
           }
         };
         reader.readAsDataURL(file);
@@ -367,7 +366,7 @@ export default class cardImage implements BlockTool {
    */
   save(): cardImageData {
     return {
-      imageUrl: this._data.imageUrl || '',
+      file: this._data.file,
       title: this.getCleanContent(this.nodes.title?.innerHTML || ''),
       description: this.getCleanContent(this.nodes.description?.innerHTML || ''),
       align: this._data.align,
@@ -383,7 +382,7 @@ export default class cardImage implements BlockTool {
    */ 
   validate(savedData: cardImageData): boolean {
     // Require at least an image or title to be present
-    return !!(savedData.imageUrl?.trim() || savedData.title?.trim());
+    return !!(savedData.file?.url?.trim() || savedData.title?.trim());
   }
 
   /**
@@ -476,7 +475,7 @@ export default class cardImage implements BlockTool {
    */
   static get sanitize() {
     return {
-      imageUrl: false, // Keep image URL/data URL as plain text
+      file: false,        // Keep uploaded file object as-is
       title: true,      // Allow all inline formatting in titles
       description: true, // Allow all inline formatting in descriptions
       align: false,     // Keep alignment as plain text
@@ -588,10 +587,10 @@ export default class cardImage implements BlockTool {
    */
 
   /**
-   * Toggle `--empty/--filled` based on the current `imageUrl` value.
+   * Toggle `--empty/--filled` based on whether `file.url` exists.
    */
   private updateImageState() {
-    const isFilled = !!this._data.imageUrl;
+    const isFilled = !!this._data.file?.url;
     this.nodes.wrapper?.classList.toggle('cdx-card-image--filled', isFilled);
     this.nodes.wrapper?.classList.toggle('cdx-card-image--empty', !isFilled);
   }

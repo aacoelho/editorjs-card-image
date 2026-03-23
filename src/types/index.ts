@@ -1,19 +1,32 @@
 import { BlockToolData } from '@editorjs/editorjs';
 
+export interface cardImageFile {
+  /**
+   * Source URL for the image (can be a data URL).
+   */
+  url: string;
+  /**
+   * Optional sizes object (mirrors Editor.js `image` tool shape).
+   */
+  sizes?: {
+    large?: { url: string };
+    [key: string]: any;
+  };
+  /**
+   * Allow additional backend fields.
+   */
+  [key: string]: any;
+}
+
 /**
  * cardImage Tool's input and output data format
  */
 export interface cardImageData extends BlockToolData {
   /**
-   * Image source URL/data URL
-   * (e.g. "https://..." or "data:image/...;base64,...")
+   * Full file object (preferred). Example:
+   * { url: string, sizes?: { large?: { url: string } }, ... }
    */
-  imageUrl?: string;
-  /**
-   * Backwards compatibility: older versions stored image source in `value`.
-   * If you have existing content, we will try to map `value -> imageUrl`.
-   */
-  value?: string;
+  file?: cardImageFile;
   title?: string;
   description?: string;
   align?: string;
@@ -45,8 +58,9 @@ export interface cardImageConfig {
    * Optional custom image selector.
    * If provided, the tool will call it when user clicks the button.
    *
-   * Supported return shapes:
+   * Supported return shapes (mirrors Editor.js `image` tool):
    *  - { success: 1, file: { url: string } }
+   *  - { success: 1, file: { url: string, sizes?: {...} } }
    *  - { file: { url: string } }
    *  - { url: string }
    *  - string (url)

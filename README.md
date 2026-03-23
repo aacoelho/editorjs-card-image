@@ -62,7 +62,9 @@ const editor = new EditorJS({
 {
   "type": "cardImage",
   "data": {
-    "imageUrl": "https://example.com/image.jpg",
+    "file": {
+      "url": "https://example.com/image.jpg"
+    },
     "title": "Customer Satisfaction",
     "description": "Based on 1,200+ reviews",
     "align": "center"
@@ -86,7 +88,7 @@ This tool uses [Vite](https://vitejs.dev/) as builder.
 | `addImageButtonPlaceholder` | `string` | `'Click to select an image...'` | Button text when no image is selected      |
 | `replaceImageButtonPlaceholder` | `string` | `'Replace image'`              | Button text when an image is selected      |
 | `deleteImageButtonPlaceholder`  | `string` | `'Delete image'`               | Button text for deleting the selected image |
-| `selectFiles`           | `function` | `undefined`                       | Optional selector used instead of the native file picker |
+| `selectFiles`           | `function` | `undefined`                       | Optional selector used instead of the native file picker; return `{ success: 1, file: { url } }` or `{ url }` |
 | `titlePlaceholder`       | `string`   | `'Add title'`                     | Placeholder text for title field            |
 | `descriptionPlaceholder` | `string`   | `'Add description'`               | Placeholder text for description field      |
 
