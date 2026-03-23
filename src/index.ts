@@ -75,6 +75,11 @@ export default class cardImage implements BlockTool {
   private readonly replaceIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,48V152a16,16,0,0,1-16,16H99.31l10.35,10.34a8,8,0,0,1-11.32,11.32l-24-24a8,8,0,0,1,0-11.32l24-24a8,8,0,0,1,11.32,11.32L99.31,152H208V48H96v8a8,8,0,0,1-16,0V48A16,16,0,0,1,96,32H208A16,16,0,0,1,224,48ZM168,192a8,8,0,0,0-8,8v8H48V104H156.69l-10.35,10.34a8,8,0,0,0,11.32,11.32l24-24a8,8,0,0,0,0-11.32l-24-24a8,8,0,0,0-11.32,11.32L156.69,88H48a16,16,0,0,0-16,16V208a16,16,0,0,0,16,16H160a16,16,0,0,0,16-16v-8A8,8,0,0,0,168,192Z"></path></svg>`;
 
   /**
+   * Icon shown in the add/select button.
+   */
+  private readonly addImageIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path fill="#5C6B7A" fill-rule="nonzero" d="M20 17.778V2.222A2.222 2.222 0 0 0 17.778 0H2.222A2.222 2.222 0 0 0 0 2.222v15.556C0 19.006.994 20 2.222 20h15.556A2.222 2.222 0 0 0 20 17.778ZM6.111 11.667l2.778 3.339L12.778 10l5 6.667H2.222l3.89-5Z"/></svg>`;
+
+  /**
    * Title input placeholder
    */
   private titlePlaceholder: string;
@@ -234,7 +239,7 @@ export default class cardImage implements BlockTool {
 
       // Button that triggers `selectFiles` or the native picker
       this.nodes.fileButton = this.make('div', this.classes.fileButton, {
-        innerHTML: this.addImageButtonPlaceholder,
+        innerHTML: `${this.addImageIconSvg}<span class="cdx-card-image__file-button-text">${this.addImageButtonPlaceholder}</span>`,
       });
 
       // Wrap replace/delete buttons together for easier styling/layout
@@ -285,8 +290,11 @@ export default class cardImage implements BlockTool {
 
             if (extractedFile?.url) {
               setFile(extractedFile);
-              return;
             }
+
+            // If custom selector is configured, never auto-open native picker.
+            // This prevents double dialogs when `selectFiles` handles its own UI.
+            return;
           }
 
           // Fallback: use local file picker and store a data URL
