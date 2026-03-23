@@ -50,7 +50,29 @@ export default class cardImage implements BlockTool {
   /**
    * Image pick button label
    */
-  private imageButtonContent: string;
+  private addImageButtonPlaceholder: string;
+
+  /**
+   * Replace image button label
+   */
+  private replaceImageButtonPlaceholder: string;
+
+  /**
+   * Delete image button label
+   */
+  private deleteImageButtonPlaceholder: string;
+
+  /**
+   * Icon shown in the delete button.
+   * Uses `currentColor` so it matches the button text color.
+   */
+  private readonly deleteIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"></path></svg>`;
+
+  /**
+   * Icon shown in the replace button.
+   * Uses `currentColor` so it matches the button text color.
+   */
+  private readonly replaceIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,48V152a16,16,0,0,1-16,16H99.31l10.35,10.34a8,8,0,0,1-11.32,11.32l-24-24a8,8,0,0,1,0-11.32l24-24a8,8,0,0,1,11.32,11.32L99.31,152H208V48H96v8a8,8,0,0,1-16,0V48A16,16,0,0,1,96,32H208A16,16,0,0,1,224,48ZM168,192a8,8,0,0,0-8,8v8H48V104H156.69l-10.35,10.34a8,8,0,0,0,11.32,11.32l24-24a8,8,0,0,0,0-11.32l-24-24a8,8,0,0,0-11.32,11.32L156.69,88H48a16,16,0,0,0-16,16V208a16,16,0,0,0,16,16H160a16,16,0,0,0,16-16v-8A8,8,0,0,0,168,192Z"></path></svg>`;
 
   /**
    * Title input placeholder
@@ -103,7 +125,10 @@ export default class cardImage implements BlockTool {
     this.block = block;
     this.readOnly = readOnly;
 
-    this.imageButtonContent = config.imageButtonContent || config.addImagePlaceholder || 'Click to select an image...';
+    this.addImageButtonPlaceholder =
+      config.addImageButtonPlaceholder || 'Click to select an image...';
+    this.replaceImageButtonPlaceholder = config.replaceImageButtonPlaceholder || 'Replace image';
+    this.deleteImageButtonPlaceholder = config.deleteImageButtonPlaceholder || 'Delete image';
     this.titlePlaceholder = config.titlePlaceholder || 'Add title';
     this.descriptionPlaceholder = config.descriptionPlaceholder || 'Add description';
 
@@ -118,7 +143,9 @@ export default class cardImage implements BlockTool {
       imageContainer: null,
       image: null,
       fileButton: null,
+      replaceButton: null,
       fileInput: null,
+      deleteButton: null,
       title: null,
       description: null,
     };
@@ -135,6 +162,8 @@ export default class cardImage implements BlockTool {
       imageContainer: 'cdx-card-image__image-container',
       image: 'cdx-card-image__image',
       fileButton: 'cdx-card-image__file-button',
+      replaceButton: 'cdx-card-image__replace-button',
+      deleteButton: 'cdx-card-image__delete-button',
       title: 'cdx-card-image__title',
       description: 'cdx-card-image__description',
       wrapperForAlignType: (alignType: string) => `cdx-card-image--${alignType}`,
@@ -210,7 +239,17 @@ export default class cardImage implements BlockTool {
 
       // Button that triggers `selectFiles` or the native picker
       this.nodes.fileButton = this.make('div', this.classes.fileButton, {
-        innerHTML: this.imageButtonContent,
+        innerHTML: this.addImageButtonPlaceholder,
+      });
+
+      // Button shown when an image exists (used for replacing)
+      this.nodes.replaceButton = this.make('div', this.classes.replaceButton, {
+        innerHTML: `${this.replaceIconSvg}<span class="cdx-card-image__replace-button-text">${this.replaceImageButtonPlaceholder}</span>`,
+      });
+
+      // Delete button (clears `imageUrl`)
+      this.nodes.deleteButton = this.make('div', this.classes.deleteButton, {
+        innerHTML: `${this.deleteIconSvg}<span class="cdx-card-image__delete-button-text">${this.deleteImageButtonPlaceholder}</span>`,
       });
 
       const showImage = (url: string) => {
@@ -232,7 +271,7 @@ export default class cardImage implements BlockTool {
         this.nodes.imageContainer?.insertBefore(this.nodes.image, firstChild);
       };
 
-      this.nodes.fileButton.addEventListener('click', async () => {
+      const pickImage = async () => {
         try {
           if (typeof this.config.selectFiles === 'function') {
             const result = await this.config.selectFiles();
@@ -256,6 +295,18 @@ export default class cardImage implements BlockTool {
         } catch (e) {
           console.error(e);
         }
+      };
+
+      this.nodes.fileButton.addEventListener('click', pickImage);
+      this.nodes.replaceButton?.addEventListener('click', pickImage);
+
+      this.nodes.deleteButton.addEventListener('click', () => {
+        this._data.imageUrl = '';
+        this.updateImageState();
+
+        if (this.nodes.image) {
+          (this.nodes.image as HTMLImageElement).src = '';
+        }
       });
 
       fileInput.addEventListener('change', () => {
@@ -276,6 +327,8 @@ export default class cardImage implements BlockTool {
       });
 
       this.nodes.imageContainer.appendChild(this.nodes.fileButton);
+      this.nodes.imageContainer.appendChild(this.nodes.replaceButton);
+      this.nodes.imageContainer.appendChild(this.nodes.deleteButton);
       this.nodes.imageContainer.appendChild(this.nodes.fileInput);
     }
 
@@ -439,7 +492,7 @@ export default class cardImage implements BlockTool {
    */
   static get toolbox() {
     return {
-      title: 'Image card',
+      title: 'Card with image',
       icon: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208ZM140,80v96a8,8,0,0,1-16,0V95l-11.56,7.71a8,8,0,1,1-8.88-13.32l24-16A8,8,0,0,1,140,80Z"></path></svg>',
     };
   }

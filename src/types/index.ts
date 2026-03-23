@@ -24,21 +24,26 @@ export interface cardImageData extends BlockToolData {
  */
 export interface cardImageConfig {
   /**
-   * Button text used to pick/select an image.
-   * Kept compatible with the older `addImagePlaceholder` config key.
+   * Button text used to pick/select an image when no image is selected yet.
    */
-  imageButtonContent?: string;
+  addImageButtonPlaceholder?: string;
+
   /**
-   * Backwards compatibility: older versions used this for the "value" field.
-   * We now use it as fallback for `imageButtonContent`.
+   * Button text shown when an image is already selected (used for replacing it).
    */
-  addImagePlaceholder?: string;
+  replaceImageButtonPlaceholder?: string;
+
+  /**
+   * Button text for deleting the selected image.
+   */
+  deleteImageButtonPlaceholder?: string;
+
   titlePlaceholder?: string;
   descriptionPlaceholder?: string;
 
   /**
    * Optional custom image selector.
-   * If provided, the tool will call it when user clicks the select button.
+   * If provided, the tool will call it when user clicks the button.
    *
    * Supported return shapes:
    *  - { success: 1, file: { url: string } }
