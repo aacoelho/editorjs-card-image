@@ -220,7 +220,7 @@ export default class cardImage implements BlockTool {
     this.nodes.imageContainer = this.make('div', this.classes.imageContainer);
 
     // If image exists (saved state / read-only), render it immediately
-    const currentUrl = this._data.file?.sizes?.large?.url || this._data.file?.url;
+    const currentUrl = this.getCurrentFileUrl();
     if (currentUrl) {
       this.nodes.image = this.make('img', this.classes.image, {
         src: currentUrl,
@@ -255,91 +255,13 @@ export default class cardImage implements BlockTool {
         innerHTML: `${this.deleteIconSvg}<span class="cdx-card-image__delete-button-text">${this.deleteImageButtonPlaceholder}</span>`,
       });
 
-      const setFile = (file: cardImageFile) => {
-        this._data.file = file;
-        this.updateImageState();
+      this.nodes.fileButton.addEventListener('click', () => this.pickImage());
+      this.nodes.replaceButton?.addEventListener('click', () => this.pickImage());
+      this.nodes.deleteButton.addEventListener('click', () => this.clearFile());
 
-        if (this.nodes.image) {
-          const url = file?.sizes?.large?.url || file?.url || '';
-          (this.nodes.image as HTMLImageElement).src = url;
-          return;
-        }
-
-        const url = file?.sizes?.large?.url || file?.url || '';
-        this.nodes.image = this.make('img', this.classes.image, {
-          src: url,
-          alt: 'Card image',
-        });
-
-        // Insert image above the buttons (if they exist)
-        const firstChild = this.nodes.imageContainer?.firstChild || null;
-        this.nodes.imageContainer?.insertBefore(this.nodes.image, firstChild);
-      };
-
-      const pickImage = async () => {
-        try {
-          if (typeof this.config.selectFiles === 'function') {
-            const result = await this.config.selectFiles();
-
-            const extractedFile: cardImageFile | undefined =
-              typeof result === 'string'
-                ? { url: result }
-                : (result?.success === 1 && result?.file?.url ? result.file : undefined) ||
-                  (result?.file?.url ? result.file : undefined) ||
-                  (result?.url ? { url: result.url } : undefined);
-
-            if (extractedFile?.url) {
-              setFile(extractedFile);
-            }
-
-            // If custom selector is configured, never auto-open native picker.
-            // This prevents double dialogs when `selectFiles` handles its own UI.
-            return;
-          }
-
-          // Fallback: use local file picker and store a data URL
-          fileInput.click();
-        } catch (e) {
-          console.error(e);
-        }
-      };
-
-      this.nodes.fileButton.addEventListener('click', pickImage);
-      this.nodes.replaceButton?.addEventListener('click', pickImage);
-
-      this.nodes.deleteButton.addEventListener('click', () => {
-        this._data.file = undefined;
-        this.updateImageState();
-
-        if (this.nodes.image) {
-          (this.nodes.image as HTMLImageElement).src = '';
-        }
-      });
-
-      // If buttons wrapper exists, ensure it sits after image
-      // (button visibility is still controlled by `cdx-card-image--empty/--filled` CSS).
-
-      fileInput.addEventListener('change', () => {
-        const file = fileInput.files?.[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = () => {
-          const result = reader.result;
-          if (typeof result === 'string') {
-            setFile({
-              url: result,
-              name: file.name,
-              type: file.type,
-              size: file.size,
-            });
-          }
-        };
-        reader.readAsDataURL(file);
-
-        // Allow selecting the same file again
-        fileInput.value = '';
-      });
+      if (typeof this.config.selectFiles !== 'function') {
+        fileInput.addEventListener('change', () => this.handleNativeFileChange());
+      }
 
       this.nodes.imageContainer.appendChild(this.nodes.fileButton);
 
@@ -604,6 +526,123 @@ export default class cardImage implements BlockTool {
   /**
    * HELPER METHODS
    */
+
+  /**
+   * Get the current preview URL from saved file data.
+   */
+  private getCurrentFileUrl(file: cardImageFile | undefined = this._data.file): string {
+    return file?.sizes?.large?.url || file?.url || '';
+  }
+
+  /**
+   * Parse custom `selectFiles` response to a file object.
+   */
+  private extractFile(result: any): cardImageFile | undefined {
+    if (typeof result === 'string') {
+      return { url: result };
+    }
+
+    if (result?.success === 1 && result?.file?.url) {
+      return result.file;
+    }
+
+    if (result?.file?.url) {
+      return result.file;
+    }
+
+    if (result?.url) {
+      return { url: result.url };
+    }
+
+    return undefined;
+  }
+
+  /**
+   * Store selected file and update preview.
+   */
+  private setFile(file: cardImageFile): void {
+    this._data.file = file;
+    this.updateImageState();
+
+    const url = this.getCurrentFileUrl(file);
+
+    if (this.nodes.image) {
+      (this.nodes.image as HTMLImageElement).src = url;
+      return;
+    }
+
+    this.nodes.image = this.make('img', this.classes.image, {
+      src: url,
+      alt: 'Card image',
+    });
+
+    // Insert image above the buttons (if they exist)
+    const firstChild = this.nodes.imageContainer?.firstChild || null;
+    this.nodes.imageContainer?.insertBefore(this.nodes.image, firstChild);
+  }
+
+  /**
+   * Open picker flow: custom selector or native input.
+   */
+  private async pickImage(): Promise<void> {
+    try {
+      if (typeof this.config.selectFiles === 'function') {
+        const result = await this.config.selectFiles();
+        const extractedFile = this.extractFile(result);
+
+        if (extractedFile?.url) {
+          this.setFile(extractedFile);
+        }
+
+        // If custom selector is configured, never auto-open native picker.
+        // This prevents double dialogs when `selectFiles` handles its own UI.
+        return;
+      }
+
+      const fileInput = this.nodes.fileInput as HTMLInputElement | null;
+      fileInput?.click();
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  /**
+   * Handle native input file selection.
+   */
+  private handleNativeFileChange(): void {
+    const fileInput = this.nodes.fileInput as HTMLInputElement | null;
+    const file = fileInput?.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result;
+      if (typeof result === 'string') {
+        this.setFile({
+          url: result,
+          name: file.name,
+          type: file.type,
+          size: file.size,
+        });
+      }
+    };
+    reader.readAsDataURL(file);
+
+    // Allow selecting the same file again
+    fileInput.value = '';
+  }
+
+  /**
+   * Remove selected file and clear preview.
+   */
+  private clearFile(): void {
+    this._data.file = undefined;
+    this.updateImageState();
+
+    if (this.nodes.image) {
+      (this.nodes.image as HTMLImageElement).src = '';
+    }
+  }
 
   /**
    * Toggle `--empty/--filled` based on whether `file.url` exists.
