@@ -48,9 +48,9 @@ export default class cardImage implements BlockTool {
   private nodes: {[key: string]: HTMLElement|null};
 
   /**
-   * Value input placeholder
+   * Image pick button label
    */
-  private valuePlaceholder: string;
+  private imageButtonContent: string;
 
   /**
    * Title input placeholder
@@ -103,7 +103,7 @@ export default class cardImage implements BlockTool {
     this.block = block;
     this.readOnly = readOnly;
 
-    this.valuePlaceholder = config.valuePlaceholder || 'Add image value';
+    this.imageButtonContent = config.imageButtonContent || config.addImagePlaceholder || 'Click to select an image...';
     this.titlePlaceholder = config.titlePlaceholder || 'Add title';
     this.descriptionPlaceholder = config.descriptionPlaceholder || 'Add description';
 
@@ -115,7 +115,10 @@ export default class cardImage implements BlockTool {
      */
     this.nodes = {
       wrapper: null,
-      value: null,
+      imageContainer: null,
+      image: null,
+      fileButton: null,
+      fileInput: null,
       title: null,
       description: null,
     };
@@ -129,7 +132,9 @@ export default class cardImage implements BlockTool {
   get classes() {
     return {
       wrapper: 'cdx-card-image',
-      value: 'cdx-card-image__value',
+      imageContainer: 'cdx-card-image__image-container',
+      image: 'cdx-card-image__image',
+      fileButton: 'cdx-card-image__file-button',
       title: 'cdx-card-image__title',
       description: 'cdx-card-image__description',
       wrapperForAlignType: (alignType: string) => `cdx-card-image--${alignType}`,
@@ -141,8 +146,16 @@ export default class cardImage implements BlockTool {
    * @param {cardImageData} data - Raw data to store (Editor.js handles sanitization automatically)
    */
   set data(data: cardImageData) {
+    const legacyValue = data.value;
+    const looksLikeUrl =
+      typeof legacyValue === 'string' &&
+      (legacyValue.startsWith('data:') ||
+        legacyValue.startsWith('http://') ||
+        legacyValue.startsWith('https://') ||
+        legacyValue.startsWith('/'));
+
     this._data = Object.assign({}, {
-      value: data.value || "",
+      imageUrl: data.imageUrl || (looksLikeUrl ? legacyValue : ''),
       title: data.title || "",
       description: data.description || "",
       align: data.align || cardImage.DEFAULT_ALIGN_TYPE,
@@ -172,15 +185,101 @@ export default class cardImage implements BlockTool {
    */
   render() {
     this.nodes.wrapper = this.make('div', this.classes.wrapper);
+    // Initialize empty/filled state (used by `index.scss`)
+    this.updateImageState();
 
-    // Value input
-    this.nodes.value = this.make('div', this.classes.value, {
-      contentEditable: !this.readOnly ? 'true' : 'false',
-      innerHTML: this._data.value || '',
-    });
-    this.nodes.value.dataset.placeholder = this.valuePlaceholder;
+    // Image area
+    this.nodes.imageContainer = this.make('div', this.classes.imageContainer);
 
-    this.nodes.wrapper.appendChild(this.nodes.value);
+    // If image exists (saved state / read-only), render it immediately
+    if (this._data.imageUrl) {
+      this.nodes.image = this.make('img', this.classes.image, {
+        src: this._data.imageUrl,
+        alt: 'Card image',
+      });
+      this.nodes.imageContainer.appendChild(this.nodes.image);
+    }
+
+    if (!this.readOnly) {
+      // Hidden native file input (fallback when `config.selectFiles` isn't provided)
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.style.display = 'none';
+      this.nodes.fileInput = fileInput;
+
+      // Button that triggers `selectFiles` or the native picker
+      this.nodes.fileButton = this.make('div', this.classes.fileButton, {
+        innerHTML: this.imageButtonContent,
+      });
+
+      const showImage = (url: string) => {
+        this._data.imageUrl = url;
+        this.updateImageState();
+
+        if (this.nodes.image) {
+          (this.nodes.image as HTMLImageElement).src = url;
+          return;
+        }
+
+        this.nodes.image = this.make('img', this.classes.image, {
+          src: url,
+          alt: 'Card image',
+        });
+
+        // Insert image above the button (if button exists)
+        const firstChild = this.nodes.imageContainer?.firstChild || null;
+        this.nodes.imageContainer?.insertBefore(this.nodes.image, firstChild);
+      };
+
+      this.nodes.fileButton.addEventListener('click', async () => {
+        try {
+          if (typeof this.config.selectFiles === 'function') {
+            const result = await this.config.selectFiles();
+
+            const extractedUrl =
+              typeof result === 'string'
+                ? result
+                : (result?.url as string) ||
+                  (result?.success === 1 ? result?.file?.url : '') ||
+                  result?.file?.url ||
+                  '';
+
+            if (extractedUrl) {
+              showImage(extractedUrl);
+              return;
+            }
+          }
+
+          // Fallback: use local file picker and store a data URL
+          fileInput.click();
+        } catch (e) {
+          console.error(e);
+        }
+      });
+
+      fileInput.addEventListener('change', () => {
+        const file = fileInput.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result;
+          if (typeof result === 'string') {
+            showImage(result);
+          }
+        };
+        reader.readAsDataURL(file);
+
+        // Allow selecting the same file again
+        fileInput.value = '';
+      });
+
+      this.nodes.imageContainer.appendChild(this.nodes.fileButton);
+      this.nodes.imageContainer.appendChild(this.nodes.fileInput);
+    }
+
+    this.nodes.wrapper.appendChild(this.nodes.imageContainer);
 
     // Title input
     this.nodes.title = this.make('div', this.classes.title, {
@@ -215,7 +314,7 @@ export default class cardImage implements BlockTool {
    */
   save(): cardImageData {
     return {
-      value: this.getCleanContent(this.nodes.value?.innerHTML || ''),
+      imageUrl: this._data.imageUrl || '',
       title: this.getCleanContent(this.nodes.title?.innerHTML || ''),
       description: this.getCleanContent(this.nodes.description?.innerHTML || ''),
       align: this._data.align,
@@ -230,8 +329,8 @@ export default class cardImage implements BlockTool {
    * @returns {boolean} true if data is valid, otherwise false
    */ 
   validate(savedData: cardImageData): boolean {
-    // Require at least a value or title to be present
-    return !!(savedData.value?.trim() || savedData.title?.trim());
+    // Require at least an image or title to be present
+    return !!(savedData.imageUrl?.trim() || savedData.title?.trim());
   }
 
   /**
@@ -324,7 +423,7 @@ export default class cardImage implements BlockTool {
    */
   static get sanitize() {
     return {
-      value: true,     // Keep numbers as plain text
+      imageUrl: false, // Keep image URL/data URL as plain text
       title: true,      // Allow all inline formatting in titles
       description: true, // Allow all inline formatting in descriptions
       align: false,     // Keep alignment as plain text
@@ -434,6 +533,15 @@ export default class cardImage implements BlockTool {
   /**
    * HELPER METHODS
    */
+
+  /**
+   * Toggle `--empty/--filled` based on the current `imageUrl` value.
+   */
+  private updateImageState() {
+    const isFilled = !!this._data.imageUrl;
+    this.nodes.wrapper?.classList.toggle('cdx-card-image--filled', isFilled);
+    this.nodes.wrapper?.classList.toggle('cdx-card-image--empty', !isFilled);
+  }
 
   /**
    * Clean HTML content and return empty string for "empty" content

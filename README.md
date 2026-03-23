@@ -48,7 +48,7 @@ const editor = new EditorJS({
       class: CardImage,
       inlineToolbar: ["bold", "italic"],
       config: {
-        valuePlaceholder: "Enter image value",
+        addImagePlaceholder: "Enter image value",
         titlePlaceholder: "Add a title",
         descriptionPlaceholder: "Add description",
       },
@@ -85,7 +85,7 @@ This tool uses [Vite](https://vitejs.dev/) as builder.
 
 | Option                   | Type     | Default                  | Description                            |
 | ------------------------ | -------- | ------------------------ | -------------------------------------- |
-| `valuePlaceholder`       | `string` | `'Add image value'` | Placeholder text for value field       |
+| `addImagePlaceholder`       | `string` | `'Add image value'` | Placeholder text for value field       |
 | `titlePlaceholder`       | `string` | `'Add title'`            | Placeholder text for title field       |
 | `descriptionPlaceholder` | `string` | `'Add description'`      | Placeholder text for description field |
 
