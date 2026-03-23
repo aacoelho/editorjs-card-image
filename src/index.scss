@@ -70,11 +70,7 @@
       display: none;
     }
 
-    .cdx-card-image__delete-button {
-      display: none;
-    }
-
-    .cdx-card-image__replace-button {
+    .cdx-card-image__buttons-wrapper {
       display: none;
     }
   }
@@ -85,15 +81,16 @@
       display: none;
     }
 
-    .cdx-card-image__replace-button {
+    .cdx-card-image__buttons-wrapper {
       display: flex;
     }
   }
 
-  &__title {
-    font-size: 18px;
-    margin-bottom: 20px;
-    outline: none !important;
+  &__buttons-wrapper {
+    margin-top: 12px;
+    display: flex;
+    gap: 12px;
+    width: 100%;
   }
 
   &__delete-button {
@@ -101,7 +98,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 12px;
+    margin-top: 0;
     border-radius: 6px;
     padding: 10px 14px;
     cursor: pointer;
@@ -130,7 +127,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 12px;
+    margin-top: 0;
     border-radius: 6px;
     padding: 10px 14px;
     cursor: pointer;
@@ -153,6 +150,13 @@
     &:hover {
       background-color: rgba(56, 138, 229, 0.14);
     }
+  }
+
+  &__title {
+    font-size: 18px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    outline: none !important;
   }
 
   &__description {

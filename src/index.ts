@@ -146,6 +146,7 @@ export default class cardImage implements BlockTool {
       replaceButton: null,
       fileInput: null,
       deleteButton: null,
+      buttonsWrapper: null,
       title: null,
       description: null,
     };
@@ -164,6 +165,7 @@ export default class cardImage implements BlockTool {
       fileButton: 'cdx-card-image__file-button',
       replaceButton: 'cdx-card-image__replace-button',
       deleteButton: 'cdx-card-image__delete-button',
+      buttonsWrapper: 'cdx-card-image__buttons-wrapper',
       title: 'cdx-card-image__title',
       description: 'cdx-card-image__description',
       wrapperForAlignType: (alignType: string) => `cdx-card-image--${alignType}`,
@@ -235,6 +237,9 @@ export default class cardImage implements BlockTool {
         innerHTML: this.addImageButtonPlaceholder,
       });
 
+      // Wrap replace/delete buttons together for easier styling/layout
+      this.nodes.buttonsWrapper = this.make('div', this.classes.buttonsWrapper);
+
       // Button shown when an image exists (used for replacing)
       this.nodes.replaceButton = this.make('div', this.classes.replaceButton, {
         innerHTML: `${this.replaceIconSvg}<span class="cdx-card-image__replace-button-text">${this.replaceImageButtonPlaceholder}</span>`,
@@ -303,6 +308,9 @@ export default class cardImage implements BlockTool {
         }
       });
 
+      // If buttons wrapper exists, ensure it sits after image
+      // (button visibility is still controlled by `cdx-card-image--empty/--filled` CSS).
+
       fileInput.addEventListener('change', () => {
         const file = fileInput.files?.[0];
         if (!file) return;
@@ -326,8 +334,11 @@ export default class cardImage implements BlockTool {
       });
 
       this.nodes.imageContainer.appendChild(this.nodes.fileButton);
-      this.nodes.imageContainer.appendChild(this.nodes.replaceButton);
-      this.nodes.imageContainer.appendChild(this.nodes.deleteButton);
+
+      // Append replace/delete inside wrapper (and file input after)
+      this.nodes.buttonsWrapper?.appendChild(this.nodes.replaceButton);
+      this.nodes.buttonsWrapper?.appendChild(this.nodes.deleteButton);
+      this.nodes.imageContainer.appendChild(this.nodes.buttonsWrapper);
       this.nodes.imageContainer.appendChild(this.nodes.fileInput);
     }
 
@@ -492,7 +503,7 @@ export default class cardImage implements BlockTool {
   static get toolbox() {
     return {
       title: 'Card with image',
-      icon: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208ZM140,80v96a8,8,0,0,1-16,0V95l-11.56,7.71a8,8,0,1,1-8.88-13.32l24-16A8,8,0,0,1,140,80Z"></path></svg>',
+      icon: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M184,72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V88A16,16,0,0,0,184,72Zm0,128H40V88H184V200ZM232,56V176a8,8,0,0,1-16,0V56H64a8,8,0,0,1,0-16H216A16,16,0,0,1,232,56Z"></path></svg>',
     };
   }
 

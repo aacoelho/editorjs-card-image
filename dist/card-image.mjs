@@ -1,8 +1,8 @@
-(function(){"use strict";try{if(typeof document!="undefined"){var e=document.createElement("style");e.appendChild(document.createTextNode(".cdx-card-image{--bg-color: #ebf0f5;--front-color: #388ae5;--border-color: #d3dce6;margin:1em auto;background-color:#f8f8f8;color:#000;border-radius:8px;padding:20px}.cdx-card-image__image-container{margin-bottom:8px}.cdx-card-image__image{border-radius:3px;overflow:hidden;width:100%;max-width:100%;display:block;object-fit:contain;background:rgba(0,0,0,.04)}.cdx-card-image__file-button{width:100%;display:flex;align-items:center;justify-content:center;border:1px dashed #d3dce6;background-color:#f5f7fa;border-radius:6px;padding:38px;color:#5c6b7a;font-size:14px;cursor:pointer;user-select:none;box-sizing:border-box}.cdx-card-image__file-button svg{width:20px;height:20px;margin:0 8px 0 0}.cdx-card-image__file-button svg path{stroke:none}.cdx-card-image__file-button:hover{color:#0080ff}.cdx-card-image__file-button:hover svg{fill:#0080ff}.cdx-card-image__file-button:hover svg path{fill:#0080ff}.cdx-card-image--empty .cdx-card-image__image,.cdx-card-image--empty .cdx-card-image__delete-button,.cdx-card-image--empty .cdx-card-image__replace-button,.cdx-card-image--filled .cdx-card-image__file-button{display:none}.cdx-card-image--filled .cdx-card-image__replace-button{display:flex}.cdx-card-image__title{font-size:18px;margin-bottom:20px;outline:none!important}.cdx-card-image__delete-button{width:100%;display:flex;align-items:center;justify-content:center;margin-top:12px;border-radius:6px;padding:10px 14px;cursor:pointer;user-select:none;box-sizing:border-box;gap:10px;border:1px solid rgba(220,53,69,.35);background-color:#dc35450f;color:#dc3545;font-size:14px}.cdx-card-image__delete-button svg{flex:0 0 auto;width:18px;height:18px}.cdx-card-image__delete-button:hover{background-color:#dc35451f}.cdx-card-image__replace-button{width:100%;display:flex;align-items:center;justify-content:center;margin-top:12px;border-radius:6px;padding:10px 14px;cursor:pointer;user-select:none;box-sizing:border-box;border:1px solid rgba(56,138,229,.35);background-color:#388ae514;color:#388ae5;font-size:14px;gap:10px}.cdx-card-image__replace-button svg{flex:0 0 auto;width:18px;height:18px}.cdx-card-image__replace-button:hover{background-color:#388ae524}.cdx-card-image__description{font-size:14px;color:#333;outline:none!important}.cdx-card-image--left{text-align:left}.cdx-card-image--center{text-align:center}.cdx-card-image--right{text-align:right}")),document.head.appendChild(e)}}catch(d){console.error("vite-plugin-css-injected-by-js",d)}})();
-var C = Object.defineProperty;
-var x = (h, t, e) => t in h ? C(h, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : h[t] = e;
-var l = (h, t, e) => (x(h, typeof t != "symbol" ? t + "" : t, e), e);
-class g {
+(function(){"use strict";try{if(typeof document!="undefined"){var e=document.createElement("style");e.appendChild(document.createTextNode(".cdx-card-image{--bg-color: #ebf0f5;--front-color: #388ae5;--border-color: #d3dce6;margin:1em auto;background-color:#f8f8f8;color:#000;border-radius:8px;padding:20px}.cdx-card-image__image-container{margin-bottom:8px}.cdx-card-image__image{border-radius:3px;overflow:hidden;width:100%;max-width:100%;display:block;object-fit:contain;background:rgba(0,0,0,.04)}.cdx-card-image__buttons-wrapper{display:flex;flex-direction:column;gap:12px;width:100%}.cdx-card-image__file-button{width:100%;display:flex;align-items:center;justify-content:center;border:1px dashed #d3dce6;background-color:#f5f7fa;border-radius:6px;padding:38px;color:#5c6b7a;font-size:14px;cursor:pointer;user-select:none;box-sizing:border-box}.cdx-card-image__file-button svg{width:20px;height:20px;margin:0 8px 0 0}.cdx-card-image__file-button svg path{stroke:none}.cdx-card-image__file-button:hover{color:#0080ff}.cdx-card-image__file-button:hover svg{fill:#0080ff}.cdx-card-image__file-button:hover svg path{fill:#0080ff}.cdx-card-image--empty .cdx-card-image__image,.cdx-card-image--empty .cdx-card-image__delete-button,.cdx-card-image--empty .cdx-card-image__replace-button,.cdx-card-image--filled .cdx-card-image__file-button{display:none}.cdx-card-image--filled .cdx-card-image__replace-button{display:flex}.cdx-card-image__delete-button{width:100%;display:flex;align-items:center;justify-content:center;margin-top:0;border-radius:6px;padding:10px 14px;cursor:pointer;user-select:none;box-sizing:border-box;gap:10px;border:1px solid rgba(220,53,69,.35);background-color:#dc35450f;color:#dc3545;font-size:14px}.cdx-card-image__delete-button svg{flex:0 0 auto;width:18px;height:18px}.cdx-card-image__delete-button:hover{background-color:#dc35451f}.cdx-card-image__replace-button{width:100%;display:flex;align-items:center;justify-content:center;margin-top:0;border-radius:6px;padding:10px 14px;cursor:pointer;user-select:none;box-sizing:border-box;border:1px solid rgba(56,138,229,.35);background-color:#388ae514;color:#388ae5;font-size:14px;gap:10px}.cdx-card-image__replace-button svg{flex:0 0 auto;width:18px;height:18px}.cdx-card-image__replace-button:hover{background-color:#388ae524}.cdx-card-image__title{font-size:18px;margin-bottom:20px;margin-top:20px;outline:none!important}.cdx-card-image__description{font-size:14px;color:#333;outline:none!important}.cdx-card-image--left{text-align:left}.cdx-card-image--center{text-align:center}.cdx-card-image--right{text-align:right}")),document.head.appendChild(e)}}catch(d){console.error("vite-plugin-css-injected-by-js",d)}})();
+var A = Object.defineProperty;
+var I = (h, t, e) => t in h ? A(h, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : h[t] = e;
+var l = (h, t, e) => (I(h, typeof t != "symbol" ? t + "" : t, e), e);
+class p {
   constructor({ data: t, config: e, api: n, block: s, readOnly: o }) {
     l(this, "api");
     l(this, "block");
@@ -42,6 +42,7 @@ class g {
       replaceButton: null,
       fileInput: null,
       deleteButton: null,
+      buttonsWrapper: null,
       title: null,
       description: null
     };
@@ -57,6 +58,7 @@ class g {
       fileButton: "cdx-card-image__file-button",
       replaceButton: "cdx-card-image__replace-button",
       deleteButton: "cdx-card-image__delete-button",
+      buttonsWrapper: "cdx-card-image__buttons-wrapper",
       title: "cdx-card-image__title",
       description: "cdx-card-image__description",
       wrapperForAlignType: (t) => `cdx-card-image--${t}`
@@ -67,14 +69,14 @@ class g {
       file: t.file,
       title: t.title || "",
       description: t.description || "",
-      align: t.align || g.DEFAULT_ALIGN_TYPE
+      align: t.align || p.DEFAULT_ALIGN_TYPE
     });
   }
   get data() {
     return this._data;
   }
   render() {
-    var e, n, s, o, p;
+    var e, n, s, o, g, u, m;
     this.nodes.wrapper = this.make("div", this.classes.wrapper), this.updateImageState(), this.nodes.imageContainer = this.make("div", this.classes.imageContainer);
     const t = ((s = (n = (e = this._data.file) == null ? void 0 : e.sizes) == null ? void 0 : n.large) == null ? void 0 : s.url) || ((o = this._data.file) == null ? void 0 : o.url);
     if (t && (this.nodes.image = this.make("img", this.classes.image, {
@@ -84,32 +86,32 @@ class g {
       const d = document.createElement("input");
       d.type = "file", d.accept = "image/*", d.style.display = "none", this.nodes.fileInput = d, this.nodes.fileButton = this.make("div", this.classes.fileButton, {
         innerHTML: this.addImageButtonPlaceholder
-      }), this.nodes.replaceButton = this.make("div", this.classes.replaceButton, {
+      }), this.nodes.buttonsWrapper = this.make("div", this.classes.buttonsWrapper), this.nodes.replaceButton = this.make("div", this.classes.replaceButton, {
         innerHTML: `${this.replaceIconSvg}<span class="cdx-card-image__replace-button-text">${this.replaceImageButtonPlaceholder}</span>`
       }), this.nodes.deleteButton = this.make("div", this.classes.deleteButton, {
         innerHTML: `${this.deleteIconSvg}<span class="cdx-card-image__delete-button-text">${this.deleteImageButtonPlaceholder}</span>`
       });
-      const m = (a) => {
-        var r, v, w, f, H, _;
+      const v = (a) => {
+        var r, f, H, _, B, C;
         if (this._data.file = a, this.updateImageState(), this.nodes.image) {
-          const B = ((v = (r = a == null ? void 0 : a.sizes) == null ? void 0 : r.large) == null ? void 0 : v.url) || (a == null ? void 0 : a.url) || "";
-          this.nodes.image.src = B;
+          const x = ((f = (r = a == null ? void 0 : a.sizes) == null ? void 0 : r.large) == null ? void 0 : f.url) || (a == null ? void 0 : a.url) || "";
+          this.nodes.image.src = x;
           return;
         }
-        const c = ((f = (w = a == null ? void 0 : a.sizes) == null ? void 0 : w.large) == null ? void 0 : f.url) || (a == null ? void 0 : a.url) || "";
+        const c = ((_ = (H = a == null ? void 0 : a.sizes) == null ? void 0 : H.large) == null ? void 0 : _.url) || (a == null ? void 0 : a.url) || "";
         this.nodes.image = this.make("img", this.classes.image, {
           src: c,
           alt: "Card image"
         });
-        const i = ((H = this.nodes.imageContainer) == null ? void 0 : H.firstChild) || null;
-        (_ = this.nodes.imageContainer) == null || _.insertBefore(this.nodes.image, i);
-      }, u = async () => {
+        const i = ((B = this.nodes.imageContainer) == null ? void 0 : B.firstChild) || null;
+        (C = this.nodes.imageContainer) == null || C.insertBefore(this.nodes.image, i);
+      }, w = async () => {
         var a, c;
         try {
           if (typeof this.config.selectFiles == "function") {
             const i = await this.config.selectFiles(), r = typeof i == "string" ? { url: i } : ((i == null ? void 0 : i.success) === 1 && ((a = i == null ? void 0 : i.file) == null ? void 0 : a.url) ? i.file : void 0) || ((c = i == null ? void 0 : i.file) != null && c.url ? i.file : void 0) || (i != null && i.url ? { url: i.url } : void 0);
             if (r != null && r.url) {
-              m(r);
+              v(r);
               return;
             }
           }
@@ -118,7 +120,7 @@ class g {
           console.error(i);
         }
       };
-      this.nodes.fileButton.addEventListener("click", u), (p = this.nodes.replaceButton) == null || p.addEventListener("click", u), this.nodes.deleteButton.addEventListener("click", () => {
+      this.nodes.fileButton.addEventListener("click", w), (g = this.nodes.replaceButton) == null || g.addEventListener("click", w), this.nodes.deleteButton.addEventListener("click", () => {
         this._data.file = void 0, this.updateImageState(), this.nodes.image && (this.nodes.image.src = "");
       }), d.addEventListener("change", () => {
         var i;
@@ -128,14 +130,14 @@ class g {
         const c = new FileReader();
         c.onload = () => {
           const r = c.result;
-          typeof r == "string" && m({
+          typeof r == "string" && v({
             url: r,
             name: a.name,
             type: a.type,
             size: a.size
           });
         }, c.readAsDataURL(a), d.value = "";
-      }), this.nodes.imageContainer.appendChild(this.nodes.fileButton), this.nodes.imageContainer.appendChild(this.nodes.replaceButton), this.nodes.imageContainer.appendChild(this.nodes.deleteButton), this.nodes.imageContainer.appendChild(this.nodes.fileInput);
+      }), this.nodes.imageContainer.appendChild(this.nodes.fileButton), (u = this.nodes.buttonsWrapper) == null || u.appendChild(this.nodes.replaceButton), (m = this.nodes.buttonsWrapper) == null || m.appendChild(this.nodes.deleteButton), this.nodes.imageContainer.appendChild(this.nodes.buttonsWrapper), this.nodes.imageContainer.appendChild(this.nodes.fileInput);
     }
     return this.nodes.wrapper.appendChild(this.nodes.imageContainer), this.nodes.title = this.make("div", this.classes.title, {
       contentEditable: this.readOnly ? "false" : "true",
@@ -143,7 +145,7 @@ class g {
     }), this.nodes.title.dataset.placeholder = this.titlePlaceholder, this.nodes.wrapper.appendChild(this.nodes.title), this.nodes.description = this.make("div", this.classes.description, {
       contentEditable: this.readOnly ? "false" : "true",
       innerHTML: this._data.description || ""
-    }), this.nodes.description.dataset.placeholder = this.descriptionPlaceholder, this.nodes.wrapper.appendChild(this.nodes.description), this.updateAlign(this._data.align || g.DEFAULT_ALIGN_TYPE), this.nodes.wrapper;
+    }), this.nodes.description.dataset.placeholder = this.descriptionPlaceholder, this.nodes.wrapper.appendChild(this.nodes.description), this.updateAlign(this._data.align || p.DEFAULT_ALIGN_TYPE), this.nodes.wrapper;
   }
   save() {
     var t, e;
@@ -181,7 +183,7 @@ class g {
   static get toolbox() {
     return {
       title: "Card with image",
-      icon: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208ZM140,80v96a8,8,0,0,1-16,0V95l-11.56,7.71a8,8,0,1,1-8.88-13.32l24-16A8,8,0,0,1,140,80Z"></path></svg>'
+      icon: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M184,72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V88A16,16,0,0,0,184,72Zm0,128H40V88H184V200ZM232,56V176a8,8,0,0,1-16,0V56H64a8,8,0,0,1,0-16H216A16,16,0,0,1,232,56Z"></path></svg>'
     };
   }
   static get enableLineBreaks() {
@@ -214,5 +216,5 @@ class g {
   }
 }
 export {
-  g as default
+  p as default
 };
