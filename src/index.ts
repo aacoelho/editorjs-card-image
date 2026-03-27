@@ -110,6 +110,33 @@ export default class cardImage implements BlockTool {
     }
   ];
 
+    /**
+   * Available layouts
+   */
+    private layouts = [
+      {
+        name: 'vertical',
+        title: 'Vertical layout',
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M200,40H56A16,16,0,0,0,40,56V200a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,16v64H56V56Zm0,144H56V136H200v64Z"></path></svg>`,
+        toggle: true,
+      },
+      {
+        name: 'horizontal',
+        title: 'Horizontal layout',
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M200,40H56A16,16,0,0,0,40,56V200a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40ZM56,56h64V200H56ZM200,200H136V56h64V200Z"></path></svg>`,
+        toggle: true,
+      },
+    ];
+
+  /**
+   * Default layout type
+   * @public
+   * @returns {string}
+   */
+  static get DEFAULT_LAYOUT_TYPE() {
+    return 'vertical';
+  }
+
   /**
    * Default alignment type
    * @public
@@ -171,9 +198,11 @@ export default class cardImage implements BlockTool {
       replaceButton: ['cdx-card-image__button', 'cdx-card-image__button--replace'],
       deleteButton: ['cdx-card-image__button', 'cdx-card-image__button--delete'],
       buttonsWrapper: 'cdx-card-image__buttons-wrapper',
+      contentContainer: 'cdx-card-image__content-container',
       title: 'cdx-card-image__title',
       description: 'cdx-card-image__description',
       wrapperForAlignType: (alignType: string) => `cdx-card-image--${alignType}`,
+      wrapperForLayoutType: (layoutType: string) => `cdx-card-image--${layoutType}`,
     };
   }
 
@@ -186,6 +215,7 @@ export default class cardImage implements BlockTool {
       file: data.file,
       title: data.title || "",
       description: data.description || "",
+      layout: data.layout || cardImage.DEFAULT_LAYOUT_TYPE,
       align: data.align || cardImage.DEFAULT_ALIGN_TYPE,
     });
   }
@@ -274,6 +304,10 @@ export default class cardImage implements BlockTool {
 
     this.nodes.wrapper.appendChild(this.nodes.imageContainer);
 
+    // Text content
+    this.nodes.contentContainer = this.make('div', this.classes.contentContainer);
+
+
     // Title input
     this.nodes.title = this.make('div', this.classes.title, {
       contentEditable: !this.readOnly ? 'true' : 'false',
@@ -281,7 +315,7 @@ export default class cardImage implements BlockTool {
     });
     this.nodes.title.dataset.placeholder = this.titlePlaceholder;
 
-    this.nodes.wrapper.appendChild(this.nodes.title);
+    this.nodes.contentContainer.appendChild(this.nodes.title);
 
     // Description input
     this.nodes.description = this.make('div', this.classes.description, {
@@ -290,9 +324,12 @@ export default class cardImage implements BlockTool {
     });
     this.nodes.description.dataset.placeholder = this.descriptionPlaceholder;
 
-    this.nodes.wrapper.appendChild(this.nodes.description);
+    this.nodes.contentContainer.appendChild(this.nodes.description);
+
+    this.nodes.wrapper.appendChild(this.nodes.contentContainer);
 
     // Apply alignment
+    this.updateLayout(this._data.layout || cardImage.DEFAULT_LAYOUT_TYPE);
     this.updateAlign(this._data.align || cardImage.DEFAULT_ALIGN_TYPE);
 
     return this.nodes.wrapper;
@@ -310,6 +347,7 @@ export default class cardImage implements BlockTool {
       file: this._data.file,
       title: this.getCleanContent(this.nodes.title?.innerHTML || ''),
       description: this.getCleanContent(this.nodes.description?.innerHTML || ''),
+      layout: this._data.layout,
       align: this._data.align,
     };
   }
@@ -334,6 +372,17 @@ export default class cardImage implements BlockTool {
    * @returns {HTMLElement}
    */ 
   renderSettings() {
+    const layouts = this.layouts.map((layout) => ({
+      icon: layout.icon,
+      name: `layout-${layout.name}`,
+      label: layout.title,
+      toggle: 'layout',
+      isActive: this._data.layout === layout.name,
+      onActivate: () => {
+        this.updateLayout(layout.name);
+      },
+    }));
+  
     const alignTypes = this.aligns.map((align) => ({
       icon: align.icon,
       name: `align-${align.name}`,
@@ -345,7 +394,7 @@ export default class cardImage implements BlockTool {
       },
     }));
 
-    return alignTypes;
+    return [...layouts, ...alignTypes];
   }
 
   /**
@@ -419,6 +468,7 @@ export default class cardImage implements BlockTool {
       file: false,        // Keep uploaded file object as-is
       title: true,      // Allow all inline formatting in titles
       description: true, // Allow all inline formatting in descriptions
+      layout: false,     // Keep layout as plain text
       align: false,     // Keep alignment as plain text
     };
   } 
@@ -433,7 +483,7 @@ export default class cardImage implements BlockTool {
   static get toolbox() {
     return {
       title: 'Card with image',
-      icon: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M184,72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V88A16,16,0,0,0,184,72Zm0,128H40V88H184V200ZM232,56V176a8,8,0,0,1-16,0V56H64a8,8,0,0,1,0-16H216A16,16,0,0,1,232,56Z"></path></svg>',
+      icon: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M200,40H56A16,16,0,0,0,40,56V200a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm-64,80h64v16H136Zm0-16V88h64v16Zm0,48h64v16H136Zm64-80H136V56h64ZM56,56h64V200H56ZM200,200H136V184h64v16Z"></path></svg>',
     };
   }
 
@@ -670,6 +720,23 @@ export default class cardImage implements BlockTool {
       .replace(/^\s*$/, ''); // Whitespace only
     
     return cleanedContent;
+  }
+
+  /**
+   * Update Layout
+   * 
+   * @param {string} currentLayout 
+   */
+  updateLayout(currentLayout: string) {
+    if (this._data.layout === currentLayout && this.nodes.wrapper?.classList.contains(this.classes.wrapperForLayoutType(currentLayout))) {
+      return;
+    }
+
+    this._data.layout = currentLayout;
+
+    this.layouts.forEach(layout => {
+      this.nodes.wrapper?.classList.toggle(this.classes.wrapperForLayoutType(layout.name), this._data.layout === layout.name);
+    });
   }
 
   /**

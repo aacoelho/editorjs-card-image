@@ -20,15 +20,12 @@ $btn-replace-text: $brand;
 $btn-replace-bg-hover: rgba(56, 138, 229, 0.14);
 
 .cdx-card-image {
+  display: flex;
   margin: 1em auto;
   background-color: $card-bg;
   color: $card-title;
   border-radius: 8px;
   padding: 20px;
-
-  &__image-container {
-    margin-bottom: 8px;
-  }
 
   &__image {
     border-radius: 3px;
@@ -125,6 +122,7 @@ $btn-replace-bg-hover: rgba(56, 138, 229, 0.14);
     box-sizing: border-box;
     gap: 10px;
     font-size: 14px;
+    white-space: nowrap;
 
     svg {
       flex: 0 0 auto;
@@ -179,5 +177,24 @@ $btn-replace-bg-hover: rgba(56, 138, 229, 0.14);
 
   &--right {
     text-align: right;
+  }
+
+  // Layout modifiers
+  &--vertical {
+    flex-direction: column;
+
+    .cdx-card-image__image-container {
+      margin-bottom: 8px;
+    }
+  }
+
+  &--horizontal {
+    flex-direction: row;
+    gap: 20px;
+
+    .cdx-card-image__image-container,
+    .cdx-card-image__content-container {
+      flex: 1 1 50%;
+    }
   }
 }

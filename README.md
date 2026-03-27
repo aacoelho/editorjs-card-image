@@ -2,16 +2,19 @@
 
 Provides Card Image blocks for the [Editor.js](https://editorjs.io/).
 
-![Card Image Demo](./assets/images/toolbox.png)
+![Toolbar](./assets/images/toolbox.png)
+![Card Image Demo](./assets/images/block.png)
 
 ## Features
 - **Image Field**: Select, replace, or delete the card image
 - **Title Field**: Descriptive labels for your card image
 - **Description Field**: Additional context or details
 - **Content Alignment**: Left, center, or right alignment options
+- **Layout**: Vertical or horizontal layout options
 - **HTML Support**: All fields support rich text formatting
 
-![Alignment Options](./assets/images/block.png)
+
+![Settings](./assets/images/settings.png)
 
 ## Installation
 
@@ -67,7 +70,8 @@ const editor = new EditorJS({
     },
     "title": "Customer Satisfaction",
     "description": "Based on 1,200+ reviews",
-    "align": "center"
+    "align": "center",
+    "layout": "vertical"
   }
 }
 ```
