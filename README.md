@@ -2,17 +2,19 @@
 
 Provides Card Image blocks for the [Editor.js](https://editorjs.io/).
 
-![Card Image Demo](./assets/images/toolbox.png)
+![Toolbar](./assets/images/toolbox.png)
+![Card Image Demo](./assets/images/block.png)
 
 ## Features
-
-- **Value Field**: Add numbers, percentages, or any metric
+- **Image Field**: Select, replace, or delete the card image
 - **Title Field**: Descriptive labels for your card image
 - **Description Field**: Additional context or details
 - **Content Alignment**: Left, center, or right alignment options
+- **Layout**: Vertical or horizontal layout options
 - **HTML Support**: All fields support rich text formatting
 
-![Alignment Options](./assets/images/block.png)
+
+![Settings](./assets/images/settings.png)
 
 ## Installation
 
@@ -48,7 +50,7 @@ const editor = new EditorJS({
       class: CardImage,
       inlineToolbar: ["bold", "italic"],
       config: {
-        valuePlaceholder: "Enter image value",
+        addImageButtonPlaceholder: "Click to select an image...",
         titlePlaceholder: "Add a title",
         descriptionPlaceholder: "Add description",
       },
@@ -63,10 +65,13 @@ const editor = new EditorJS({
 {
   "type": "cardImage",
   "data": {
-    "value": "94%",
+    "file": {
+      "url": "https://example.com/image.jpg"
+    },
     "title": "Customer Satisfaction",
     "description": "Based on 1,200+ reviews",
-    "align": "center"
+    "align": "center",
+    "layout": "vertical"
   }
 }
 ```
@@ -82,12 +87,14 @@ This tool uses [Vite](https://vitejs.dev/) as builder.
 `npm run build` — build the tool for production to the `dist` folder
 
 ## Configuration Options
-
-| Option                   | Type     | Default                  | Description                            |
-| ------------------------ | -------- | ------------------------ | -------------------------------------- |
-| `valuePlaceholder`       | `string` | `'Add image value'` | Placeholder text for value field       |
-| `titlePlaceholder`       | `string` | `'Add title'`            | Placeholder text for title field       |
-| `descriptionPlaceholder` | `string` | `'Add description'`      | Placeholder text for description field |
+| Option                   | Type       | Default                           | Description                                   |
+| ------------------------ | ---------- | --------------------------------- | --------------------------------------------- |
+| `addImageButtonPlaceholder` | `string` | `'Click to select an image...'` | Button text when no image is selected      |
+| `replaceImageButtonPlaceholder` | `string` | `'Replace image'`              | Button text when an image is selected      |
+| `deleteImageButtonPlaceholder`  | `string` | `'Delete image'`               | Button text for deleting the selected image |
+| `selectFiles`           | `function` | `undefined`                       | Optional selector used instead of the native file picker; return `{ success: 1, file: { url } }` or `{ url }` |
+| `titlePlaceholder`       | `string`   | `'Add title'`                     | Placeholder text for title field            |
+| `descriptionPlaceholder` | `string`   | `'Add description'`               | Placeholder text for description field      |
 
 ## Links
 
