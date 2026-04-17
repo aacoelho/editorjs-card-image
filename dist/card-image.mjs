@@ -1,4 +1,4 @@
-(function(){"use strict";try{if(typeof document!="undefined"){var e=document.createElement("style");e.appendChild(document.createTextNode(".cdx-card-image{display:flex;margin:1em auto;background-color:#f8f8f8;color:#000;border-radius:8px;padding:20px}.cdx-card-image__image{border-radius:3px;overflow:hidden;width:100%;max-width:100%;display:block;object-fit:contain}.cdx-card-image__file-button{width:100%;display:flex;align-items:center;justify-content:center;border:1px dashed #d3dce6;border-radius:6px;padding:38px;color:#5c6b7a;font-size:14px;cursor:pointer;user-select:none;box-sizing:border-box}.cdx-card-image__file-button svg{width:20px;height:20px;margin:0 8px 0 0}.cdx-card-image__file-button svg path{stroke:none}.cdx-card-image__file-button:hover{color:#0080ff;background-color:#f5f7fa}.cdx-card-image__file-button:hover svg{fill:#0080ff}.cdx-card-image__file-button:hover svg path{fill:#0080ff}.cdx-card-image--empty .cdx-card-image__image,.cdx-card-image--empty .cdx-card-image__buttons-wrapper,.cdx-card-image--filled .cdx-card-image__file-button{display:none}.cdx-card-image--filled .cdx-card-image__buttons-wrapper{display:flex}.cdx-card-image__buttons-wrapper{margin-top:4px;display:flex;gap:4px;width:100%;flex-wrap:wrap}.cdx-card-image__button{flex:1;width:100%;display:flex;align-items:center;justify-content:center;margin-top:0;border-radius:6px;padding:10px 14px;cursor:pointer;user-select:none;box-sizing:border-box;gap:10px;font-size:14px;white-space:nowrap}.cdx-card-image__button svg{flex:0 0 auto;width:18px;height:18px}.cdx-card-image__button--delete{border:1px solid rgba(220,53,69,.35);background-color:#dc35450f;color:#dc3545}.cdx-card-image__button--delete:hover{background-color:#dc35451f}.cdx-card-image__button--replace{border:1px solid rgba(56,138,229,.35);background-color:#388ae514;color:#388ae5}.cdx-card-image__button--replace:hover{background-color:#388ae524}.cdx-card-image__title{font-size:18px;margin-bottom:20px;margin-top:20px;outline:none!important}.cdx-card-image__description{font-size:14px;color:#333;outline:none!important}.cdx-card-image--left{text-align:left}.cdx-card-image--center{text-align:center}.cdx-card-image--right{text-align:right}.cdx-card-image--vertical{flex-direction:column}.cdx-card-image--vertical .cdx-card-image__image-container{margin-bottom:8px}.cdx-card-image--horizontal{flex-direction:row;gap:20px}.cdx-card-image--horizontal .cdx-card-image__image-container,.cdx-card-image--horizontal .cdx-card-image__content-container{flex:1 1 50%}")),document.head.appendChild(e)}}catch(a){console.error("vite-plugin-css-injected-by-js",a)}})();
+(function(){"use strict";try{if(typeof document!="undefined"){var e=document.createElement("style");e.appendChild(document.createTextNode(".cdx-card-image{display:flex;margin:1em auto;background-color:#f8f8f8;color:#000;border-radius:8px;padding:20px}.cdx-card-image__image{border-radius:3px;overflow:hidden;width:100%;max-width:100%;display:block;object-fit:contain}.cdx-card-image__file-button{width:100%;display:flex;align-items:center;justify-content:center;border:1px dashed #d3dce6;border-radius:6px;padding:38px;color:#5c6b7a;font-size:14px;cursor:pointer;user-select:none;box-sizing:border-box}.cdx-card-image__file-button svg{width:20px;height:20px;margin:0 8px 0 0}.cdx-card-image__file-button svg path{stroke:none}.cdx-card-image__file-button:hover{color:#0080ff;background-color:#f5f7fa}.cdx-card-image__file-button:hover svg{fill:#0080ff}.cdx-card-image__file-button:hover svg path{fill:#0080ff}.cdx-card-image--empty .cdx-card-image__image,.cdx-card-image--empty .cdx-card-image__buttons-wrapper,.cdx-card-image--filled .cdx-card-image__file-button{display:none}.cdx-card-image--filled .cdx-card-image__buttons-wrapper{display:flex}.cdx-card-image--editable.cdx-card-image--filled .cdx-card-image__image{cursor:pointer}.cdx-card-image__image-container{position:relative}.cdx-card-image__buttons-wrapper{margin-top:4px;display:flex;gap:4px;width:auto;flex-wrap:wrap;position:absolute;bottom:8px;left:8px;right:8px}.cdx-card-image__button{flex:1;width:100%;display:flex;align-items:center;justify-content:center;margin-top:0;border-radius:6px;padding:10px 14px;cursor:pointer;user-select:none;box-sizing:border-box;gap:10px;font-size:14px;white-space:nowrap}.cdx-card-image__button svg{flex:0 0 auto;width:18px;height:18px}.cdx-card-image__button--delete{border:1px solid #eeb4b9;background-color:#f6eced;color:#dc3545}.cdx-card-image__button--delete:hover{background-color:#f5e1e3}.cdx-card-image__button--replace{border:1px solid #c0d5ed;background-color:#ebf0f7;color:#388ae5}.cdx-card-image__button--replace:hover{background-color:#e0e9f5}.cdx-card-image__title{font-size:18px;margin-bottom:20px;margin-top:20px;outline:none!important}.cdx-card-image__description{font-size:14px;color:#333;outline:none!important}.cdx-card-image--left{text-align:left}.cdx-card-image--center{text-align:center}.cdx-card-image--right{text-align:right}.cdx-card-image--vertical{flex-direction:column}.cdx-card-image--vertical .cdx-card-image__image-container{margin-bottom:8px}.cdx-card-image--horizontal{flex-direction:row;gap:20px}.cdx-card-image--horizontal .cdx-card-image__image-container,.cdx-card-image--horizontal .cdx-card-image__content-container{flex:1 1 50%}")),document.head.appendChild(e)}}catch(a){console.error("vite-plugin-css-injected-by-js",a)}})();
 var o = Object.defineProperty;
 var d = (l, e, t) => e in l ? o(l, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : l[e] = t;
 var s = (l, e, t) => (d(l, typeof e != "symbol" ? e + "" : e, t), t);
@@ -49,6 +49,9 @@ class r {
         toggle: !0
       }
     ]);
+    s(this, "onImageClickReplace", () => {
+      this.pickImage();
+    });
     this.config = t, this.api = i, this.block = a, this.readOnly = n, this.addImageButtonPlaceholder = t.addImageButtonPlaceholder || "Click to select an image...", this.replaceImageButtonPlaceholder = t.replaceImageButtonPlaceholder || "Replace image", this.deleteImageButtonPlaceholder = t.deleteImageButtonPlaceholder || "Delete image", this.titlePlaceholder = t.titlePlaceholder || "Add title", this.descriptionPlaceholder = t.descriptionPlaceholder || "Add description", this.data = e, this.nodes = {
       wrapper: null,
       imageContainer: null,
@@ -98,7 +101,7 @@ class r {
   }
   render() {
     var t, i, a;
-    this.nodes.wrapper = this.make("div", this.classes.wrapper), this.updateImageState(), this.nodes.imageContainer = this.make("div", this.classes.imageContainer);
+    this.nodes.wrapper = this.make("div", this.classes.wrapper), this.updateImageState(), this.readOnly || this.nodes.wrapper.classList.add("cdx-card-image--editable"), this.nodes.imageContainer = this.make("div", this.classes.imageContainer);
     const e = this.getCurrentFileUrl();
     if (e && (this.nodes.image = this.make("img", this.classes.image, {
       src: e,
@@ -113,7 +116,7 @@ class r {
         innerHTML: `${this.deleteIconSvg}<span class="cdx-card-image__delete-button-text">${this.deleteImageButtonPlaceholder}</span>`
       }), this.nodes.fileButton.addEventListener("click", () => this.pickImage()), (t = this.nodes.replaceButton) == null || t.addEventListener("click", () => this.pickImage()), this.nodes.deleteButton.addEventListener("click", () => this.clearFile()), typeof this.config.selectFiles != "function" && n.addEventListener("change", () => this.handleNativeFileChange()), this.nodes.imageContainer.appendChild(this.nodes.fileButton), (i = this.nodes.buttonsWrapper) == null || i.appendChild(this.nodes.replaceButton), (a = this.nodes.buttonsWrapper) == null || a.appendChild(this.nodes.deleteButton), this.nodes.imageContainer.appendChild(this.nodes.buttonsWrapper), this.nodes.imageContainer.appendChild(this.nodes.fileInput);
     }
-    return this.nodes.wrapper.appendChild(this.nodes.imageContainer), this.nodes.contentContainer = this.make("div", this.classes.contentContainer), this.nodes.title = this.make("div", this.classes.title, {
+    return this.bindImageClickToReplace(), this.nodes.wrapper.appendChild(this.nodes.imageContainer), this.nodes.contentContainer = this.make("div", this.classes.contentContainer), this.nodes.title = this.make("div", this.classes.title, {
       contentEditable: this.readOnly ? "false" : "true",
       innerHTML: this._data.title || ""
     }), this.nodes.title.dataset.placeholder = this.titlePlaceholder, this.nodes.contentContainer.appendChild(this.nodes.title), this.nodes.description = this.make("div", this.classes.description, {
@@ -204,7 +207,13 @@ class r {
       alt: "Card image"
     });
     const i = ((a = this.nodes.imageContainer) == null ? void 0 : a.firstChild) || null;
-    (n = this.nodes.imageContainer) == null || n.insertBefore(this.nodes.image, i);
+    (n = this.nodes.imageContainer) == null || n.insertBefore(this.nodes.image, i), this.bindImageClickToReplace();
+  }
+  bindImageClickToReplace() {
+    if (this.readOnly || !this.nodes.image)
+      return;
+    const e = this.nodes.image;
+    e.removeEventListener("click", this.onImageClickReplace), e.addEventListener("click", this.onImageClickReplace), e.title = this.replaceImageButtonPlaceholder;
   }
   async pickImage() {
     try {

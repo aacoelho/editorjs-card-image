@@ -246,6 +246,10 @@ export default class cardImage implements BlockTool {
     // Initialize empty/filled state (used by `index.scss`)
     this.updateImageState();
 
+    if (!this.readOnly) {
+      this.nodes.wrapper.classList.add('cdx-card-image--editable');
+    }
+
     // Image area
     this.nodes.imageContainer = this.make('div', this.classes.imageContainer);
 
@@ -301,6 +305,8 @@ export default class cardImage implements BlockTool {
       this.nodes.imageContainer.appendChild(this.nodes.buttonsWrapper);
       this.nodes.imageContainer.appendChild(this.nodes.fileInput);
     }
+
+    this.bindImageClickToReplace();
 
     this.nodes.wrapper.appendChild(this.nodes.imageContainer);
 
@@ -629,6 +635,25 @@ export default class cardImage implements BlockTool {
     // Insert image above the buttons (if they exist)
     const firstChild = this.nodes.imageContainer?.firstChild || null;
     this.nodes.imageContainer?.insertBefore(this.nodes.image, firstChild);
+    this.bindImageClickToReplace();
+  }
+
+  /**
+   * In edit mode, clicking the preview image runs the same replace flow as the replace button.
+   */
+  private readonly onImageClickReplace = (): void => {
+    void this.pickImage();
+  };
+
+  private bindImageClickToReplace(): void {
+    if (this.readOnly || !this.nodes.image) {
+      return;
+    }
+
+    const img = this.nodes.image as HTMLImageElement;
+    img.removeEventListener('click', this.onImageClickReplace);
+    img.addEventListener('click', this.onImageClickReplace);
+    img.title = this.replaceImageButtonPlaceholder;
   }
 
   /**

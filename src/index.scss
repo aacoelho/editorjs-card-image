@@ -9,15 +9,15 @@ $btn-file-bg: #f5f7fa;
 $btn-file-border: #d3dce6;
 $btn-file-text: #5c6b7a;
 
-$btn-delete-bg: rgba(220, 53, 69, 0.06);
-$btn-delete-border: rgba(220, 53, 69, 0.35);
+$btn-delete-bg: #f6eced;
+$btn-delete-border: #eeb4b9;
 $btn-delete-text: #dc3545;
-$btn-delete-bg-hover: rgba(220, 53, 69, 0.12);
+$btn-delete-bg-hover: #f5e1e3;
 
-$btn-replace-bg: rgba(56, 138, 229, 0.08);
-$btn-replace-border: rgba(56, 138, 229, 0.35);
+$btn-replace-bg: #ebf0f7;
+$btn-replace-border: #c0d5ed;
 $btn-replace-text: $brand;
-$btn-replace-bg-hover: rgba(56, 138, 229, 0.14);
+$btn-replace-bg-hover: #e0e9f5;
 
 .cdx-card-image {
   display: flex;
@@ -100,12 +100,24 @@ $btn-replace-bg-hover: rgba(56, 138, 229, 0.14);
     }
   }
 
+  &--editable.cdx-card-image--filled .cdx-card-image__image {
+    cursor: pointer;
+  }
+
+  &__image-container {
+    position: relative;
+  }
+
   &__buttons-wrapper {
     margin-top: 4px;
     display: flex;
     gap: 4px;
-    width: 100%;
+    width: auto;
     flex-wrap: wrap;
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
   }
 
   &__button {
