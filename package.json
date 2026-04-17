@@ -1,7 +1,7 @@
 {
   "name": "editorjs-card-image",
   "description": "Card Image Tool for Editor.js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "dist/card-image.umd.js",
   "module": "dist/card-image.mjs",
   "scripts": {
